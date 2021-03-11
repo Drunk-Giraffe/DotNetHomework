@@ -15,30 +15,32 @@ namespace _2._1
 
         bool IsPrimeNumber(int num)
         {
-            bool flag=true;
             if (num == 2||num==3)
                 return true;
             for (int i = 2; i < Math.Sqrt(num) + 1; i++)
-                if (num %i == 0)
-                    flag=false;
-            return flag;
+                if (num % i == 0)
+                    return false;
+            return true;
         }
         void FindPrimeFactors(int num)
         {
             int i = 2;
             if (IsPrimeNumber(num))
                 Console.WriteLine(num);
-            while(!IsPrimeNumber(num))
+            else
             {
-                if (num % i == 0&&IsPrimeNumber(i))
+                while (!IsPrimeNumber(num))
                 {
-                    Console.Write(i + " ");
-                    num = num / i;
+                    if (num % i == 0 && IsPrimeNumber(i))
+                    {
+                        Console.Write(i + " ");
+                        num = num / i;
+                    }
+                    else
+                        i++;
                 }
-                else
-                    i++;
+                Console.Write(num);
             }
-            Console.Write(num);
         }
     }
 }
