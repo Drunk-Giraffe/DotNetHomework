@@ -11,7 +11,7 @@ namespace ConsoleApp1
             int Sum = 0;
             Random ra = new Random();
             ShapeFactory sf = new ShapeFactory();
-            while(Sum<=10)
+            while(Sum<10)
             {
                 Shape sh = sf.RandomGetShape(ra.Next(1,10001));
                 if (sh != null)
