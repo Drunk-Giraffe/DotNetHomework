@@ -31,38 +31,45 @@ namespace _9
         {
             this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.AbsoluteUri = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AbsoluteUri = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.downloadedPagesDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.hostFilterDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fileFilterDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.htmlEncodingDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.dataGridView2);
             this.panel1.Controls.Add(this.dataGridView1);
             this.panel1.Location = new System.Drawing.Point(12, 87);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(776, 364);
             this.panel1.TabIndex = 0;
             // 
+            // bindingSource1
+            // 
+            this.bindingSource1.DataSource = typeof(_9.Crawler);
+            // 
             // dataGridView1
             // 
             this.dataGridView1.AutoGenerateColumns = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.AbsoluteUri});
-            this.dataGridView1.DataMember = "RightUrl";
+            this.AbsoluteUri,
+            this.downloadedPagesDataGridViewTextBoxColumn,
+            this.hostFilterDataGridViewTextBoxColumn,
+            this.fileFilterDataGridViewTextBoxColumn,
+            this.htmlEncodingDataGridViewTextBoxColumn});
             this.dataGridView1.DataSource = this.bindingSource1;
             this.dataGridView1.Location = new System.Drawing.Point(3, 3);
             this.dataGridView1.Name = "dataGridView1";
@@ -70,19 +77,13 @@ namespace _9
             this.dataGridView1.Size = new System.Drawing.Size(383, 358);
             this.dataGridView1.TabIndex = 0;
             // 
-            // dataGridView2
+            // AbsoluteUri
             // 
-            this.dataGridView2.AutoGenerateColumns = false;
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn1});
-            this.dataGridView2.DataMember = "WrongUrl";
-            this.dataGridView2.DataSource = this.bindingSource1;
-            this.dataGridView2.Location = new System.Drawing.Point(390, 3);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.RowTemplate.Height = 23;
-            this.dataGridView2.Size = new System.Drawing.Size(383, 358);
-            this.dataGridView2.TabIndex = 1;
+            this.AbsoluteUri.DataPropertyName = "AbsoluteUri";
+            this.AbsoluteUri.HeaderText = "AbsoluteUri";
+            this.AbsoluteUri.Name = "AbsoluteUri";
+            this.AbsoluteUri.ReadOnly = true;
+            this.AbsoluteUri.Width = 380;
             // 
             // textBox1
             // 
@@ -128,25 +129,30 @@ namespace _9
             this.label3.TabIndex = 5;
             this.label3.Text = "错误结果";
             // 
-            // bindingSource1
+            // downloadedPagesDataGridViewTextBoxColumn
             // 
-            this.bindingSource1.DataSource = typeof(_9.SimpleCrawler);
+            this.downloadedPagesDataGridViewTextBoxColumn.DataPropertyName = "DownloadedPages";
+            this.downloadedPagesDataGridViewTextBoxColumn.HeaderText = "DownloadedPages";
+            this.downloadedPagesDataGridViewTextBoxColumn.Name = "downloadedPagesDataGridViewTextBoxColumn";
+            this.downloadedPagesDataGridViewTextBoxColumn.ReadOnly = true;
             // 
-            // dataGridViewTextBoxColumn1
+            // hostFilterDataGridViewTextBoxColumn
             // 
-            this.dataGridViewTextBoxColumn1.DataPropertyName = "AbsoluteUri";
-            this.dataGridViewTextBoxColumn1.HeaderText = "AbsoluteUri";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.ReadOnly = true;
-            this.dataGridViewTextBoxColumn1.Width = 380;
+            this.hostFilterDataGridViewTextBoxColumn.DataPropertyName = "HostFilter";
+            this.hostFilterDataGridViewTextBoxColumn.HeaderText = "HostFilter";
+            this.hostFilterDataGridViewTextBoxColumn.Name = "hostFilterDataGridViewTextBoxColumn";
             // 
-            // AbsoluteUri
+            // fileFilterDataGridViewTextBoxColumn
             // 
-            this.AbsoluteUri.DataPropertyName = "AbsoluteUri";
-            this.AbsoluteUri.HeaderText = "AbsoluteUri";
-            this.AbsoluteUri.Name = "AbsoluteUri";
-            this.AbsoluteUri.ReadOnly = true;
-            this.AbsoluteUri.Width = 380;
+            this.fileFilterDataGridViewTextBoxColumn.DataPropertyName = "FileFilter";
+            this.fileFilterDataGridViewTextBoxColumn.HeaderText = "FileFilter";
+            this.fileFilterDataGridViewTextBoxColumn.Name = "fileFilterDataGridViewTextBoxColumn";
+            // 
+            // htmlEncodingDataGridViewTextBoxColumn
+            // 
+            this.htmlEncodingDataGridViewTextBoxColumn.DataPropertyName = "HtmlEncoding";
+            this.htmlEncodingDataGridViewTextBoxColumn.HeaderText = "HtmlEncoding";
+            this.htmlEncodingDataGridViewTextBoxColumn.Name = "htmlEncodingDataGridViewTextBoxColumn";
             // 
             // Form1
             // 
@@ -162,9 +168,8 @@ namespace _9
             this.Name = "Form1";
             this.Text = "Form1";
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -173,7 +178,6 @@ namespace _9
         #endregion
 
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button button1;
@@ -181,8 +185,11 @@ namespace _9
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn AbsoluteUri;
+        private System.Windows.Forms.DataGridViewTextBoxColumn downloadedPagesDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn hostFilterDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn fileFilterDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn htmlEncodingDataGridViewTextBoxColumn;
     }
 }
 

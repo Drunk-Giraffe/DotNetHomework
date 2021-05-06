@@ -12,7 +12,7 @@ namespace _9
 {
     public partial class Form1 : Form
     {
-        SimpleCrawler SimpleCrawler;
+        Crawler Crawler;
         public Form1()
         {
             InitializeComponent();
@@ -20,9 +20,9 @@ namespace _9
 
         private void button1_Click(object sender, EventArgs e)
         {
-            SimpleCrawler = new SimpleCrawler(textBox1.Text);
-            bindingSource1.DataSource = SimpleCrawler;
-            SimpleCrawler.Crawl();
+            Crawler = new Crawler(textBox1.Text);
+            bindingSource1.DataSource = Crawler;
+            Crawler.Crawl(textBox1.Text);
             bindingSource1.ResetBindings(false);
         }
     }
