@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _8
+namespace _11
 {
     [Serializable]
     public class Cargo
@@ -55,11 +55,11 @@ namespace _8
         }
         public override bool Equals(object obj)
         {
-            var cargo = obj as Cargo ;
+            var cargo = obj as Cargo;
             return cargo != null &&
-                   cargoID  == cargo.cargoID &&
-                   cargoName  == cargo.cargoName&&
-                   cargoDescription==cargo.cargoDescription;
+                   cargoID == cargo.cargoID &&
+                   cargoName == cargo.cargoName &&
+                   cargoDescription == cargo.cargoDescription;
         }
 
         public override int GetHashCode()

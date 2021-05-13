@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _8
+namespace _11
 {
     [Serializable]
     public class OrderDetails
@@ -17,8 +17,10 @@ namespace _8
         }
         public Cargo cargo { get; set; }
         public int amount { get; set; }
-        public double TP {
-            get => cargo == null ? 0.0 : cargo.cargoPrice * amount; }
+        public double TP
+        {
+            get => cargo == null ? 0.0 : cargo.cargoPrice * amount;
+        }
         public override string ToString()
         {
             return (cargo.ToString() + "货物数量：" + amount + "\n");

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _8
+namespace _11
 {
     [Serializable]
     public class Customer
@@ -22,7 +22,7 @@ namespace _8
             var customer = obj as Customer;
             return customer != null &&
                    customerID == customer.customerID &&
-                   customerName  == customer.customerName;
+                   customerName == customer.customerName;
         }
         public override int GetHashCode()
         {

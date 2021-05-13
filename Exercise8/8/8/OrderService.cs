@@ -64,63 +64,56 @@ namespace _8
         public void ModifyOrderDetailsCargo(string key1, string key2, string newCargo)
         {
             Order order = QueryOrder(1, key1).First();
-            OrderDetails od = order.SelectOrderDetails(key2);
-            od.cargo = new Cargo(newCargo);
-            od.TP = od.amount * od.cargo.cargoPrice;
-            order.totalPrice = 0;
-            foreach (OrderDetails orderDetails in order.orderDetails)
+            if (order != null)
             {
-                order.totalPrice += orderDetails.TP;
+                OrderDetails od = order.SelectOrderDetails(key2);
+                od.cargo = new Cargo(newCargo);
             }
         }
         public void ModifyOrderDetailsAmount(string key1, string key2, int newAmount)
         {
             Order order = QueryOrder(1, key1).First();
-            OrderDetails od = order.SelectOrderDetails(key2);
-            od.amount = newAmount;
-            od.TP = od.amount * od.cargo.cargoPrice;
-            order.totalPrice = 0;
-            foreach (OrderDetails orderDetails in order.orderDetails)
+            if (order != null)
             {
-                order.totalPrice += orderDetails.TP;
+                OrderDetails od = order.SelectOrderDetails(key2);
+                od.amount = newAmount;
             }
         }
         public void ModifyCustomerName(string key, string newCustomerName)
         {
             Order order = QueryOrder(1, key).First();
+            if(order!=null)
             order.customer.customerName = newCustomerName;
         }
         public void ModifyCustomerID(string key, string newCustomerID)
         {
             Order order = QueryOrder(1, key).First();
+            if(order!=null)
             order.customer.customerID = newCustomerID;
         }
         public void ModifyOrderID(string key, string newOrderID)
         {
             Order order = QueryOrder(1, key).First();
-            order.orderId = newOrderID;
+            if (order != null)
+                order.orderId = newOrderID;
         }
-        public void Export()
+        public bool Export()
         {
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Order>));
             using (FileStream fs = new FileStream("订单.xml", FileMode.Create))
             {
                 xmlSerializer.Serialize(fs, orders);
             }
-            Console.WriteLine("导出订单成功！");
-            Console.ReadLine();
-            Console.Clear();
+            return true;
         }
-        public void Import()
+        public bool Import()
         {
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Order>));
             using (FileStream fs = new FileStream("订单.xml", FileMode.Open))
             {
                 orders = (List<Order>)xmlSerializer.Deserialize(fs);
             }
-            Console.WriteLine("导入订单成功！");
-            Console.ReadLine();
-            Console.Clear();
+            return true;
         }
         public void SortBy(int num)
         {

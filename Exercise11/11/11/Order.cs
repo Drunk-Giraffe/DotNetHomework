@@ -1,22 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace _8
+namespace _11
 {
     [Serializable]
     public class Order : IComparable<OrderService>
     {
         public Order()
         {
-            
+
             orderDetails = new List<OrderDetails>();
         }
 
         public Customer customer { get; set; }
-        public List<OrderDetails> orderDetails { get; set;}
+        public List<OrderDetails> orderDetails { get; set; }
         public double totalPrice { get => orderDetails.Sum(orderDetails => orderDetails.TP); }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string orderId { get; set; }
 
         public override string ToString()
