@@ -5,33 +5,54 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml.Serialization;
 
 namespace _11
 {
     public class OrderService
     {
-        public static void AddOrder(Order order)
+        public OrderService()
+        {        }
+        public List<Order> Orders
         {
-            using (var _context = new OrderDBContext())
+            get
             {
-                _context.Orders.Add(order);
-                _context.Entry(order).State = EntityState.Added;
-                _context.SaveChanges();
+                using (var ctx = new OrderDBContext())
+                {
+                    return ctx.Orders.Include(o => o.OrderDetails.Select(d => d.Cargo)).Include("Customer").
+                      ToList<Order>();
+                }
             }
         }
-        public static void DeleteOrder(string key)
+        public void AddOrder(Order order)
+        {
+            FixOrder(order);
+            using (var _context = new OrderDBContext())
+            {
+                try
+                {
+                    _context.Entry(order).State = EntityState.Added;
+                    _context.SaveChanges();
+                }catch(Exception e)
+                {
+                    MessageBox.Show(e.InnerException.Message); ;
+                }
+            }
+        }
+        public void DeleteOrder(string key)
         {
             using (var _context = new OrderDBContext())
             {
-                var currentOrder = _context.Orders.Include(o => o.orderDetails).Where(o => o.orderId == key).FirstOrDefault();
+                var currentOrder = _context.Orders.Include(o => o.OrderDetails).Where(o => o.OrderId == key).FirstOrDefault();
                 if (currentOrder == null)
                     throw new InvalidOperationException("要删除的订单不存在！");
+                _context.OrderDetails.RemoveRange(currentOrder.OrderDetails);
                 _context.Orders.Remove(currentOrder);
                 _context.SaveChanges();
             }
         }
-        public static IEnumerable<Order> QueryOrder(int num, string key)
+        public IEnumerable<Order> QueryOrder(int num, string key)
         {
             using (var _context = new OrderDBContext())
             {
@@ -41,22 +62,22 @@ namespace _11
                     switch (num)
                     {
                         case 1:
-                            order = (from o in _context.Orders where o.orderId == key orderby o.totalPrice select o).ToList();
+                            order = (from o in _context.Orders where o.OrderId == key orderby o.TotalPrice select o).ToList();
                             if (order == null)
                                 throw new Exception("没有符合条件的订单！");
                             break;
                         case 2:
-                            order = (from o in _context.Orders where o.QueryOrderDetails(key) orderby o.totalPrice select o).ToList();
+                            order = (from o in _context.Orders where o.QueryOrderDetails(key) orderby o.TotalPrice select o).ToList();
                             if (order == null)
                                 throw new Exception("没有符合条件的订单！");
                             break;
                         case 3:
-                            order = (from o in _context.Orders where o.customer.customerName == key orderby o.totalPrice select o).ToList();
+                            order = (from o in _context.Orders where o.Customer.CustomerName == key orderby o.TotalPrice select o).ToList();
                             if (order == null)
                                 throw new Exception("没有符合条件的订单！");
                             break;
                         case 4:
-                            order = (from o in _context.Orders where o.totalPrice <= int.Parse(key) orderby o.totalPrice select o).ToList();
+                            order = (from o in _context.Orders where o.TotalPrice <= int.Parse(key) orderby o.TotalPrice select o).ToList();
                             if (order == null)
                                 throw new Exception("没有符合条件的订单！");
                             break;
@@ -72,7 +93,7 @@ namespace _11
                 }
             }
         }
-        public static void ModifyOrderDetailsCargo(string key1, string key2, string newCargo)
+        public void ModifyOrderDetailsCargo(string key1, string key2, string newCargo)
         {
             using (var _context = new OrderDBContext())
             {
@@ -80,13 +101,13 @@ namespace _11
                 if (order != null)
                 {
                     OrderDetails od = order.SelectOrderDetails(key2);
-                    od.cargo = new Cargo(newCargo);
+                    od.Cargo = new Cargo(newCargo);
                 }
                 _context.Entry(order).State = EntityState.Modified;
                 _context.SaveChanges();
             }
         }
-        public static void ModifyOrderDetailsAmount(string key1, string key2, int newAmount)
+        public void ModifyOrderDetailsAmount(string key1, string key2, int newAmount)
         {
             using (var _context = new OrderDBContext())
             {
@@ -94,51 +115,51 @@ namespace _11
                 if (order != null)
                 {
                     OrderDetails od = order.SelectOrderDetails(key2);
-                    od.amount = newAmount;
+                    od.Amount = newAmount;
                 }
                 _context.Entry(order).State = EntityState.Modified;
                 _context.SaveChanges();
             }
         }
-        public static void ModifyCustomerName(string key, string newCustomerName)
+        public void ModifyCustomerName(string key, string newCustomerName)
         {
             using (var _context = new OrderDBContext())
             {
                 Order order = QueryOrder(1, key).First();
                 if (order != null)
-                    order.customer.customerName = newCustomerName;
+                    order.Customer.CustomerName = newCustomerName;
                 _context.Entry(order).State = EntityState.Modified;
                 _context.SaveChanges();
             }
 
         }
-        public static void ModifyCustomerID(string key, string newCustomerID)
+        public void ModifyCustomerID(string key, string newCustomerID)
         {
             using (var _context = new OrderDBContext())
             {
                 Order order = QueryOrder(1, key).First();
                 if (order != null)
-                    order.customer.customerID = newCustomerID;
+                    order.Customer.CustomerID = newCustomerID;
                 _context.Entry(order).State = EntityState.Modified;
                 _context.SaveChanges();
             }
         }
-        public static void ModifyOrderID(string key, string newOrderID)
+        public void ModifyOrderID(string key, string newOrderID)
         {
             using (var _context = new OrderDBContext())
             {
                 Order order = QueryOrder(1, key).First();
                 if (order != null)
-                    order.orderId = newOrderID;
+                    order.OrderId = newOrderID;
                 _context.Entry(order).State = EntityState.Modified;
                 _context.SaveChanges();
             }
         }
-        public static bool Export()
+        public bool Export()
         {
             using (var _context = new OrderDBContext())
             {
-                
+
                 using (FileStream fs = new FileStream("订单.xml", FileMode.Create))
                 {
                     _serializer.Serialize(fs, _context.Orders);
@@ -148,7 +169,7 @@ namespace _11
             }
         }
         private static XmlSerializer _serializer = new XmlSerializer(typeof(Order[]), new[] { typeof(Order), typeof(OrderDetails) });
-        public static bool Import()
+        public bool Import()
         {
             if (!File.Exists("订单.xml"))
                 throw new InvalidOperationException("文件不存在");
@@ -165,5 +186,16 @@ namespace _11
             }
             return true;
         }
+        private void FixOrder(Order newOrder)
+        {
+            newOrder.Customer.CustomerID = newOrder.Customer.CustomerID;
+            newOrder.Customer = null;
+            newOrder.OrderDetails.ForEach(d =>
+            {
+                d.Cargo.CargoID = d.Cargo.CargoID;
+                d.Cargo = null;
+            });
+        }
+
     }
 }

@@ -7,21 +7,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-namespace _11
+using _11;
+namespace OrderForm
 {
     public partial class Form1 : Form
     {
-        List<OrderDetails> list = new List<OrderDetails>();
+        List<OrderDetails> list;
+        Order order;
+        OrderService OrderService;
         public Form1()
         {
             InitializeComponent();
+            order = new Order();
+            list = new List<OrderDetails>();
+            OrderService = new OrderService();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            using (var _context = new OrderDBContext()) {
-                bindingSource1.DataSource = _context.Orders; 
-            }
+
+            bindingSource1.DataSource = OrderService.Orders;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -54,31 +59,29 @@ namespace _11
             switch (AddCargoName.Text)
             {
                 case "苹果":
-                    orderDetails.cargo = new Cargo("001");
+                    orderDetails.Cargo = new Cargo("001");
                     break;
                 case "大米":
-                    orderDetails.cargo = new Cargo("002");
+                    orderDetails.Cargo = new Cargo("002");
                     break;
                 case "铁矿石":
-                    orderDetails.cargo = new Cargo("003");
+                    orderDetails.Cargo = new Cargo("003");
                     break;
             }
-            orderDetails.amount = int.Parse(AddCargoAmount.Text);
+            orderDetails.Amount = int.Parse(AddCargoAmount.Text);
             list.Add(orderDetails);
             bindingSource1.ResetBindings(false);
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Order order = new Order();
-            order.orderId = AddOrderID.Text;
-            Customer customer = new Customer();
-            customer.customerID = AddCustomerID.Text;
-            customer.customerName = AddCustomerName.Text;
-            order.customer = customer;
-            order.orderDetails = list;
-            list = null;
+            
+            order.OrderId = AddOrderID.Text;
+            order.Customer = new Customer(AddCustomerID.Text, AddCustomerName.Text);
+            order.OrderDetails = list;
             OrderService.AddOrder(order);
+            order = new Order();
+            list = null;
             bindingSource1.ResetBindings(false);
             MessageBox.Show("订单添加成功");
         }
@@ -158,24 +161,24 @@ namespace _11
             switch (AddNewCargoName.Text)
             {
                 case "苹果":
-                    orderDetails.cargo = new Cargo("001");
+                    orderDetails.Cargo = new Cargo("001");
                     break;
                 case "大米":
-                    orderDetails.cargo = new Cargo("002");
+                    orderDetails.Cargo = new Cargo("002");
                     break;
                 case "铁矿石":
-                    orderDetails.cargo = new Cargo("003");
+                    orderDetails.Cargo = new Cargo("003");
                     break;
             }
-            orderDetails.amount = int.Parse(AddNewCargoAmount.Text);
-            OrderService.QueryOrder(1, ModifiedOrderID.Text).First().orderDetails.Add(orderDetails);
+            orderDetails.Amount = int.Parse(AddNewCargoAmount.Text);
+            OrderService.QueryOrder(1, ModifiedOrderID.Text).First().OrderDetails.Add(orderDetails);
             bindingSource1.ResetBindings(false);
             MessageBox.Show("添加成功");
         }
 
         private void button13_Click(object sender, EventArgs e)
         {
-            OrderService.QueryOrder(1, ModifiedOrderID.Text).First().orderDetails.Remove(OrderService.QueryOrder(1, ModifiedOrderID.Text).First().SelectOrderDetails(DeleteCargoName.SelectedItem.ToString()));
+            OrderService.QueryOrder(1, ModifiedOrderID.Text).First().OrderDetails.Remove(OrderService.QueryOrder(1, ModifiedOrderID.Text).First().SelectOrderDetails(DeleteCargoName.SelectedItem.ToString()));
             bindingSource1.ResetBindings(false);
             MessageBox.Show("删除成功");
         }

@@ -1,5 +1,5 @@
 ﻿
-namespace _11
+namespace OrderForm
 {
     partial class Form1
     {

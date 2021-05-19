@@ -13,26 +13,26 @@ namespace _11
     {
         public Order()
         {
-
-            orderDetails = new List<OrderDetails>();
+            OrderId = Guid.NewGuid().ToString();
+            OrderDetails = new List<OrderDetails>();
         }
 
-        public Customer customer { get; set; }
-        public List<OrderDetails> orderDetails { get; set; }
-        public double totalPrice { get => orderDetails.Sum(orderDetails => orderDetails.TP); }
+        public Customer Customer { get; set; }
+        public List<OrderDetails> OrderDetails { get; set; }
+        public double TotalPrice { get => OrderDetails.Sum(orderDetails => orderDetails.TP); }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string orderId { get; set; }
+        public string OrderId { get; set; }
 
         public override string ToString()
         {
-            return (customer.ToString() + "订单编号：" + orderId + "\n" + "订单总价：" + totalPrice + "\n");
+            return (Customer.ToString() + "订单编号：" + OrderId + "\n" + "订单总价：" + TotalPrice + "\n");
         }
         public bool QueryOrderDetails(string key)
         {
-            foreach (OrderDetails od in orderDetails)
+            foreach (OrderDetails od in OrderDetails)
             {
-                if (od.cargo.cargoName == key)
+                if (od.Cargo.CargoName == key)
                     return true;
             }
             return false;
@@ -41,7 +41,7 @@ namespace _11
         {
             try
             {
-                foreach (OrderDetails od in orderDetails)
+                foreach (OrderDetails od in OrderDetails)
                 {
                     if (QueryOrderDetails(key))
                         return od;
@@ -57,19 +57,22 @@ namespace _11
         public override bool Equals(object obj)
         {
             Order o = obj as Order;
-            return orderId == o.orderId;
+            return OrderId == o.OrderId;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(customer, orderDetails, totalPrice, orderId);
+            var hashCode = -531220479;
+            hashCode = hashCode * -1521134295 + OrderId.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Customer.CustomerName);
+            return hashCode;
         }
         public int CompareTo(object obj)
         {
             if (!(obj is Order))
                 throw new ArgumentException();
             Order order = (Order)obj;
-            return int.Parse(orderId).CompareTo(int.Parse(order.orderId));
+            return int.Parse(OrderId).CompareTo(int.Parse(order.OrderId));
         }
 
         public int CompareTo(OrderService other)
